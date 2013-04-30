@@ -68,6 +68,8 @@ var Game = (function() {
       this.controls = {
         mode: 'Multi Rocket',
         thrust: 800,
+        'side thrust': 100,
+        'motor torque': 10,
         reset: this.reset
       };
 
@@ -77,6 +79,8 @@ var Game = (function() {
       gui.add(this.controls, 'reset');
       gui.add(this.controls, 'mode', ['Single Rocket', 'Multi Rocket']);
       gui.add(this.controls, 'thrust', 0, 2000);
+      gui.add(this.controls, 'side thrust', 0, 2000);
+      gui.add(this.controls, 'motor torque', 0, 200);
 
       addEventListener('mousedown', function(e) {
         self.physics.startDrag(new b2Vec2(e.x, e.y));
@@ -189,6 +193,13 @@ var Game = (function() {
       this.entities.step(dt);
       this.physics.step(dt);
       this.lander.engine.engineThrust = this.controls.thrust;
+      this.lander.engine.joint.main.motorTorque(this.controls['motor torque']);
+      if(this.lander.mode === 'Multi Rocket') {
+        this.lander.engineRight.engineThrust = this.controls['side thrust'];
+        this.lander.engineLeft.engineThrust = this.controls['side thrust'];
+        this.lander.engineRight.joint.main.motorTorque(this.controls['motor torque']);
+        this.lander.engineLeft.joint.main.motorTorque(this.controls['motor torque']);
+      }
       if(this.cameraControls) {
         this.cameraControls.update();
       }

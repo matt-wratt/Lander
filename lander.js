@@ -133,8 +133,8 @@ var Lander = (function() {
 
     if(this.mode === 'Multi Rocket') {
       this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0, 0);
-      this.engineRight = new Engine(this, new b2Vec2(x - 2, y - 2), 100, -this.angle90, this.turboAngle, 0);
-      this.engineLeft = new Engine(this, new b2Vec2(x + 2, y - 2), 100, this.angle90, 0, -this.turboAngle);
+      this.engineRight = new Engine(this, new b2Vec2(x - 2, y - 2), 100, -this.angle90, this.turboAngle, -this.turboAngle);
+      this.engineLeft = new Engine(this, new b2Vec2(x + 2, y - 2), 100, this.angle90, this.turboAngle, -this.turboAngle);
     } else {
       this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0.7, -0.7);
     }
@@ -152,29 +152,36 @@ var Lander = (function() {
 
     update: function() {
       this.engine[Game.input.actions.up ? 'on' : 'off']();
-      var angle = 0;
       if(this.mode === 'Multi Rocket') {
-        this.engineRight.rotateTo(-this.angle90);
-        this.engineLeft.rotateTo(this.angle90);
+        var rightAngle = -this.angle90;
+        var leftAngle = this.angle90;
         this.engineRight[Game.input.actions.left ? 'on' : 'off']();
         this.engineLeft[Game.input.actions.right ? 'on' : 'off']();
         if(Game.input.actions.turbo) {
-          angle += this.turboAngle;
           this.engine.on();
-          this.engineRight.rotateTo(-this.angle90 + angle);
-          this.engineLeft.rotateTo(this.angle90 - angle);
           if(!Game.input.actions.right) {
+            leftAngle -=  this.turboAngle;
             this.engineRight.on();
-          } else {
-            this.engineLeft.rotateTo(this.angle90);
           }
           if(!Game.input.actions.left) {
             this.engineLeft.on();
-          } else {
-            this.engineRight.rotateTo(-this.angle90);
+            rightAngle +=  this.turboAngle;
           }
         }
+        if(Game.input.actions.down) {
+          this.engineRight.on();
+          this.engineLeft.on();
+          if(!Game.input.actions.right) {
+            leftAngle += this.turboAngle;
+          }
+          if(!Game.input.actions.left) {
+            rightAngle -= this.turboAngle;
+          }
+        }
+        this.engineRight.rotateTo(rightAngle);
+        this.engineLeft.rotateTo(leftAngle);
       } else {
+        var angle = 0;
         if(Game.input.actions.left) { angle += 0.7; }
         if(Game.input.actions.right) { angle -= 0.7; }
         this.engine.rotateTo(angle);
@@ -288,7 +295,7 @@ var Engine = (function() {
       thrustVector.add(v);
       thrustPoint = this.body.main.worldPoint(new b2Vec2(0, 2));
       thrustPoint = to3D(thrustPoint);
-      Game.particles.cone(thrustPoint, thrustVector, new THREE.Color(0xdd380c), 50);
+      Game.particles.cone(thrustPoint, thrustVector, new THREE.Color(0xdd380c), this.engineThrust / 10);
       this.light.intensity = 5;
       this.light.position.copy(thrustPoint);
    }

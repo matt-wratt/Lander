@@ -320,6 +320,13 @@ var Joint = (function() {
 
   Joint.prototype = {
 
+    motorTorque: function(torque) {
+      if(torque !== undefined) {
+        this.joint.SetMaxMotorTorque(torque);
+      }
+      return this.joint.GetMotorTorque();
+    },
+
     motorSpeed: function(speed) {
       if(speed !== undefined) {
         this.joint.SetMotorSpeed(speed);
