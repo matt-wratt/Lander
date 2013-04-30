@@ -128,12 +128,16 @@ var Lander = (function() {
       }
     });
 
+    this.turboAngle = 1.2;
+    this.angle90 = Math.PI / 2;
+
     if(this.mode === 'Multi Rocket') {
-      this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0);
-      this.engineRight = new Engine(this, new b2Vec2(x - 2, y - 2), 100, -Math.PI / 2, 0);
-      this.engineLeft = new Engine(this, new b2Vec2(x + 2, y - 2), 100, Math.PI / 2, 0);
+      this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0, 0);
+      this.engineRight = new Engine(this, new b2Vec2(x - 2, y - 2), 100, -this.angle90, this.turboAngle, 0);
+      this.engineLeft = new Engine(this, new b2Vec2(x + 2, y - 2), 100, this.angle90, 0, -this.turboAngle);
     } else {
-      this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0.7);
+      this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0.7, -0.7);
+      this.input.bind(16, 'turbo');
     }
   }
 
@@ -149,11 +153,29 @@ var Lander = (function() {
 
     update: function() {
       this.engine[Game.input.actions.up ? 'on' : 'off']();
+      var angle = 0;
+      this.engineRight.rotateTo(-this.angle90);
+      this.engineLeft.rotateTo(this.angle90);
       if(this.mode === 'Multi Rocket') {
         this.engineRight[Game.input.actions.left ? 'on' : 'off']();
         this.engineLeft[Game.input.actions.right ? 'on' : 'off']();
+        if(Game.input.actions.turbo) {
+          angle += this.turboAngle;
+          this.engine.on();
+          this.engineRight.rotateTo(-this.angle90 + angle);
+          this.engineLeft.rotateTo(this.angle90 - angle);
+          if(!Game.input.actions.right) {
+            this.engineRight.on();
+          } else {
+            this.engineLeft.rotateTo(this.angle90);
+          }
+          if(!Game.input.actions.left) {
+            this.engineLeft.on();
+          } else {
+            this.engineRight.rotateTo(-this.angle90);
+          }
+        }
       } else {
-        var angle = 0;
         if(Game.input.actions.left) { angle += 0.7; }
         if(Game.input.actions.right) { angle -= 0.7; }
         this.engine.rotateTo(angle);
@@ -166,15 +188,13 @@ var Lander = (function() {
 
 var Engine = (function() {
 
-  function Engine(owner, offset, thrust, angle, limit) {
+  function Engine(owner, offset, thrust, angle, upperLimit, lowerLimit) {
     Entity.call(this);
 
     this.owner = owner;
     this.offset = offset;
     this.engineThrust = thrust;
     this.firing = false;
-
-    limit = limit !== undefined ? limit : 0.7;
 
     var metal = new THREE.MeshLambertMaterial({color: 0x555555, ambient: 0x222222});
 
@@ -211,8 +231,8 @@ var Engine = (function() {
       anchorTarget: 'main',
       anchor: new b2Vec2(0, 0),
       limit: {
-        lower: angle - limit,
-        upper: angle + limit
+        lower: angle + lowerLimit,
+        upper: angle + upperLimit
       },
       motor: {
         speed: 0,

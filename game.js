@@ -13,6 +13,7 @@ var Game = (function() {
       this.input.bind(39, 'right');
       this.input.bind(40, 'down');
       this.input.bind(37, 'left');
+      this.input.bind(16, 'turbo');
 
       this.entities = new Entities();
 
