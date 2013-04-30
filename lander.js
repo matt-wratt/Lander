@@ -153,9 +153,9 @@ var Lander = (function() {
     update: function() {
       this.engine[Game.input.actions.up ? 'on' : 'off']();
       var angle = 0;
-      this.engineRight.rotateTo(-this.angle90);
-      this.engineLeft.rotateTo(this.angle90);
       if(this.mode === 'Multi Rocket') {
+        this.engineRight.rotateTo(-this.angle90);
+        this.engineLeft.rotateTo(this.angle90);
         this.engineRight[Game.input.actions.left ? 'on' : 'off']();
         this.engineLeft[Game.input.actions.right ? 'on' : 'off']();
         if(Game.input.actions.turbo) {

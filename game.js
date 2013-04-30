@@ -149,6 +149,28 @@ var Game = (function() {
           }
         }]
       });
+      var size = 2;
+      var count = 15;
+      position.x = 2;
+      for(var i = 0; i < count; ++i) {
+        new Body({
+          position: position,
+          fixture:{
+            width: size,
+            height: size,
+            offset: new b2Vec2(0, 0),
+            scene: {
+              material: landing,
+              z: size,
+              shadows: {
+                cast: true,
+                receive: true
+              }
+            }
+          }
+        });
+        position.y -= size;
+      }
 
       this.lander = new Lander(this.controls.mode, width / 4, height - 5);
       this.entities.add(this.lander);
