@@ -137,7 +137,6 @@ var Lander = (function() {
       this.engineLeft = new Engine(this, new b2Vec2(x + 2, y - 2), 100, this.angle90, 0, -this.turboAngle);
     } else {
       this.engine = new Engine(this, new b2Vec2(x, y + 2.5), 800, 0, 0.7, -0.7);
-      this.input.bind(16, 'turbo');
     }
   }
 
