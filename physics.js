@@ -352,6 +352,10 @@ var SceneFixture = (function() {
 
   var scale = 10;
 
+  window.from3D = function(vec) {
+    return new b2Vec2(vec.x / -scale, vec.y / -scale);
+  };
+
   window.to3D = function(vec, z) {
     return new THREE.Vector3(vec.x * -scale, vec.y * -scale, (z || 0) * -scale);
   };
