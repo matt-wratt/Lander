@@ -66,17 +66,19 @@ var Game = (function() {
       this.physics = new Physics();
 
       this.controls = {
+        reset: this.reset,
+        'camera fixed': false,
         mode: 'Multi Rocket',
         thrust: 800,
-        'side thrust': 100,
-        'motor torque': 10,
-        reset: this.reset
+        'side thrust': 400,
+        'motor torque': 100
       };
 
       this.createWorld();
 
       var gui = new dat.GUI();
       gui.add(this.controls, 'reset');
+      gui.add(this.controls, 'camera fixed');
       gui.add(this.controls, 'mode', ['Single Rocket', 'Multi Rocket']);
       gui.add(this.controls, 'thrust', 0, 2000);
       gui.add(this.controls, 'side thrust', 0, 2000);
@@ -99,7 +101,6 @@ var Game = (function() {
     },
 
     createWorld: function() {
-      this.particles.init();
       var width = innerWidth / this.physics.scale;
       var height = innerHeight / this.physics.scale;
       var position = new b2Vec2(width / 2, height);
@@ -178,6 +179,7 @@ var Game = (function() {
 
       this.lander = new Lander(this.controls.mode, width / 4, height - 5);
       this.entities.add(this.lander);
+      this.particles.init();
     },
 
     reset: function() {
@@ -199,6 +201,11 @@ var Game = (function() {
         this.lander.engineLeft.engineThrust = this.controls['side thrust'];
         this.lander.engineRight.joint.main.motorTorque(this.controls['motor torque']);
         this.lander.engineLeft.joint.main.motorTorque(this.controls['motor torque']);
+      }
+      if(this.controls['camera fixed']) {
+        this.camera.position.copy(to3D({x: 20, y: 20}, -50));
+      } else {
+        this.camera.position.copy(to3D(this.lander.body.main.position(), -50));
       }
       if(this.cameraControls) {
         this.cameraControls.update();

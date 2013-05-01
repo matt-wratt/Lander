@@ -293,7 +293,7 @@ var Engine = (function() {
       var v = to3D(this.body.main.velocity());
       v.multiplyScalar(0.2 / to3D.scale);
       thrustVector.add(v);
-      thrustPoint = this.body.main.worldPoint(new b2Vec2(0, 2));
+      thrustPoint = this.body.main.worldPoint(new b2Vec2(0, 1));
       thrustPoint = to3D(thrustPoint);
       Game.particles.cone(thrustPoint, thrustVector, new THREE.Color(0xdd380c), this.engineThrust / 10);
       this.light.intensity = 5;
