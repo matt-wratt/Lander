@@ -4,7 +4,7 @@ define([
   'three',
   'box2dweb',
   'orbit_controls',
-  'dat_gui',
+  'dat.gui',
   'app/scale',
   'app/entities',
   'app/scene',
