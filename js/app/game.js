@@ -1,6 +1,22 @@
-var Game = (function() {
+define([
+  'domReady',
+  'underscore',
+  'three',
+  'box2dweb',
+  'orbit_controls',
+  'dat_gui',
+  'app/scale',
+  'app/entities',
+  'app/input_manager',
+  'app/particle_system',
+  'app/physics',
+  'app/body',
+  'app/lander'
+], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, Entities, InputManager, particles, physics, Body, Lander) {
 
-  function Game() { }
+  var b2Vec2 = Box2D.Common.Math.b2Vec2;
+
+  function Game() {}
 
   Game.prototype = {
     init: function() {
@@ -17,14 +33,14 @@ var Game = (function() {
 
       this.entities = new Entities();
 
-      this.particles = new ParticleSystem();
+      this.particles = particles;
 
       var width = innerWidth;
       var height = innerHeight;
       this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
-      this.camera.position.copy(to3D({x: 20, y: 20}, -50));
+      this.camera.position.copy(scale.to3D({x: 20, y: 20}, -50));
 
-      // this.cameraControls = new THREE.OrbitControls(this.camera);
+      // this.cameraControls = new OrbitControls(this.camera);
 
       this.renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x000000, clearAlpha: 1});
       this.renderer.shadowMapEnabled = true;
@@ -55,15 +71,15 @@ var Game = (function() {
 
       var light = new THREE.DirectionalLight( 0xffffff, 0.7 );
       light.castShadow = true;
-      light.position.copy(to3D({x: -50, y: -90}, -30));
+      light.position.copy(scale.to3D({x: -50, y: -90}, -30));
       // light.shadowCameraVisible = true;
-      light.shadowCameraLeft = -50 * to3D.scale;
-      light.shadowCameraRight = 50 * to3D.scale;
-      light.shadowCameraTop = 80 * to3D.scale;
-      light.shadowCameraBottom = -80 * to3D.scale;
+      light.shadowCameraLeft = -50 * scale.scale;
+      light.shadowCameraRight = 50 * scale.scale;
+      light.shadowCameraTop = 80 * scale.scale;
+      light.shadowCameraBottom = -80 * scale.scale;
       this.scene.add(light);
 
-      this.physics = new Physics();
+      this.physics = physics;
 
       this.controls = {
         reset: this.reset,
@@ -203,9 +219,9 @@ var Game = (function() {
         this.lander.engineLeft.joint.main.motorTorque(this.controls['motor torque']);
       }
       if(this.controls['camera fixed']) {
-        this.camera.position.copy(to3D({x: 20, y: 20}, -50));
+        this.camera.position.copy(scale.to3D({x: 20, y: 20}, -50));
       } else {
-        this.camera.position.copy(to3D(this.lander.body.main.position(), -50));
+        this.camera.position.copy(scale.to3D(this.lander.body.main.position(), -50));
       }
       if(this.cameraControls) {
         this.cameraControls.update();
@@ -215,6 +231,8 @@ var Game = (function() {
     }
   };
 
-  return new Game();
+  var game = new Game();
 
-}());
+  return game;
+
+});

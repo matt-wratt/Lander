@@ -1,4 +1,4 @@
-var InputManager = (function() {
+define(['underscore'], function(_) {
 
   function InputManager() {
     this.bindings = {};
@@ -46,4 +46,4 @@ var InputManager = (function() {
 
   return InputManager;
 
-}());
+});

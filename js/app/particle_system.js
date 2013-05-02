@@ -1,4 +1,4 @@
-var ParticleSystem = (function() {
+define(['underscore', 'three', 'app/game', 'app/entity'], function(_, THREE, Game, Entity) {
 
   var vShader = [
       'attribute float size;',
@@ -28,13 +28,14 @@ var ParticleSystem = (function() {
 
   _.extend(ParticleSystem.prototype, new Entity(), {
     init: function() {
+      if(!Game) Game = require('app/game');
       this.motion = [];
       this.decay = [];
       var attributes = {
         start: {type: 'l', value: []},
         size: {type: 'f', value: []},
         ccolor: {type: 'c', value: []}
-      }
+      };
       var uniforms = {
         color: {type: 'c', value: new THREE.Color(0xffffff)},
         texture: {type: "t", value: THREE.ImageUtils.loadTexture("particle.png")},
@@ -132,6 +133,6 @@ var ParticleSystem = (function() {
 
   });
 
-  return ParticleSystem;
+  return new ParticleSystem();
 
-}());
+});
