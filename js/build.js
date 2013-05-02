@@ -1,5 +1,4 @@
 ({
-  "dir": "./build",
   baseUrl: 'libs',
   paths: {
     app: '../app'

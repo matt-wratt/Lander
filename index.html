@@ -4,7 +4,16 @@
     <style>
       * { margin: 0; padding: 0; }
     </style>
-    <script data-main="js/app" src="js/libs/require.js"></script>
+    <script src="js/libs/require.js"></script>
+    <script>
+      var debug = true;
+      var path = "js/lander";
+      if(debug) {
+        path = "js/app";
+      }
+      require.config({paths: {app: path}});
+      require(["app"]);
+    </script>
   </head>
   <body></body>
 </html>
