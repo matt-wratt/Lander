@@ -1,4 +1,4 @@
-define(['underscore', 'three', 'box2dweb', 'app/game', 'app/entity', 'app/engine'], function(_, THREE, Box2D, Game, Entity, Engine) {
+define(['underscore', 'three', 'box2dweb', 'app/game', 'app/input_manager', 'app/entity', 'app/engine'], function(_, THREE, Box2D, Game, input, Entity, Engine) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
@@ -156,30 +156,30 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/entity', 'app/engine
     },
 
     update: function() {
-      this.engine[Game.input.actions.up ? 'on' : 'off']();
+      this.engine[input.actions.up ? 'on' : 'off']();
       if(this.mode === 'Multi Rocket') {
         var rightAngle = -this.angle90;
         var leftAngle = this.angle90;
-        this.engineRight[Game.input.actions.left ? 'on' : 'off']();
-        this.engineLeft[Game.input.actions.right ? 'on' : 'off']();
-        if(Game.input.actions.turbo) {
+        this.engineRight[input.actions.left ? 'on' : 'off']();
+        this.engineLeft[input.actions.right ? 'on' : 'off']();
+        if(input.actions.turbo) {
           this.engine.on();
-          if(!Game.input.actions.right) {
+          if(!input.actions.right) {
             leftAngle -=  this.turboAngle;
             this.engineRight.on();
           }
-          if(!Game.input.actions.left) {
+          if(!input.actions.left) {
             this.engineLeft.on();
             rightAngle +=  this.turboAngle;
           }
         }
-        if(Game.input.actions.down) {
+        if(input.actions.down) {
           this.engineRight.on();
           this.engineLeft.on();
-          if(!Game.input.actions.right) {
+          if(!input.actions.right) {
             leftAngle += this.turboAngle;
           }
-          if(!Game.input.actions.left) {
+          if(!input.actions.left) {
             rightAngle -= this.turboAngle;
           }
         }
@@ -187,8 +187,8 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/entity', 'app/engine
         this.engineLeft.rotateTo(leftAngle);
       } else {
         var angle = 0;
-        if(Game.input.actions.left) { angle += 0.7; }
-        if(Game.input.actions.right) { angle -= 0.7; }
+        if(input.actions.left) { angle += 0.7; }
+        if(input.actions.right) { angle -= 0.7; }
         this.engine.rotateTo(angle);
       }
     }

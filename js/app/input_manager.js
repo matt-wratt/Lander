@@ -5,8 +5,8 @@ define(['underscore'], function(_) {
     this.actions = {};
     _.bindAll(this, 'onKeyDown', 'onKeyUp');
     this.logAll = false;
-    addEventListener('keydown', this.onKeyDown)
-    addEventListener('keyup', this.onKeyUp)
+    addEventListener('keydown', this.onKeyDown);
+    addEventListener('keyup', this.onKeyUp);
   }
 
   InputManager.prototype = {
@@ -44,6 +44,6 @@ define(['underscore'], function(_) {
   };
 
 
-  return InputManager;
+  return new InputManager();
 
 });

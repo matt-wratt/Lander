@@ -12,7 +12,7 @@ define([
   'app/physics',
   'app/body',
   'app/lander'
-], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, Entities, InputManager, particles, physics, Body, Lander) {
+], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, Entities, input, particles, physics, Body, Lander) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
@@ -24,12 +24,11 @@ define([
 
       _.bindAll(this, 'animate', 'reset');
 
-      this.input = new InputManager();
-      this.input.bind(38, 'up');
-      this.input.bind(39, 'right');
-      this.input.bind(40, 'down');
-      this.input.bind(37, 'left');
-      this.input.bind(16, 'turbo');
+      input.bind(38, 'up');
+      input.bind(39, 'right');
+      input.bind(40, 'down');
+      input.bind(37, 'left');
+      input.bind(16, 'turbo');
 
       this.entities = new Entities();
 
