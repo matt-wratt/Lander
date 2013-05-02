@@ -1,11 +1,9 @@
-define(['underscore', 'three', 'box2dweb', 'app/game', 'app/particle_system', 'app/entity', 'app/body_reference', 'app/scale'], function(_, THREE, Box2D, Game, particles, Entity, BodyReference, scale) {
+define(['underscore', 'three', 'box2dweb', 'app/scene', 'app/particle_system', 'app/entity', 'app/body_reference', 'app/scale'], function(_, THREE, Box2D, scene, particles, Entity, BodyReference, scale) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
   function Engine(owner, offset, thrust, angle, upperLimit, lowerLimit) {
     Entity.call(this);
-
-    if(!Game) Game = require('app/game');
 
     this.owner = owner;
     this.offset = offset;
@@ -59,13 +57,13 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/particle_system', 'a
 
     this.light = new THREE.PointLight(0xdd380c, 5, 10 * scale.scale);
     this.light.position.set(0, 0, 0);
-    Game.scene.add(this.light);
+    scene.add(this.light);
   }
 
   _.extend(Engine.prototype, new Entity(), {
 
     removing: function() {
-      Game.scene.remove(this.light);
+      scene.remove(this.light);
     },
 
     rotateTo: function(angle) {

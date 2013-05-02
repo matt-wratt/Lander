@@ -1,4 +1,4 @@
-define(['underscore', 'three', 'box2dweb', 'app/game', 'app/physics', 'app/scale', 'app/scene_fixture'], function(_, THREE, Box2D, Game, physics, scale, SceneFixture) {
+define(['underscore', 'three', 'box2dweb', 'app/scene', 'app/physics', 'app/scale', 'app/scene_fixture'], function(_, THREE, Box2D, scene, physics, scale, SceneFixture) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
   var b2BodyDef = Box2D.Dynamics.b2BodyDef;
@@ -36,7 +36,6 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/physics', 'app/scale
   var bodyDef = new b2BodyDef();
 
   function Body(options) {
-    if(!Game) Game = require('app/game');
     options = _.extend({}, defaults, options);
 
     var bodyDefOptions = _.pick(options, 'active', 'allowSleep', 'angle', 'angularVelocity',
@@ -95,7 +94,7 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/physics', 'app/scale
     }, this);
 
     this.body = physics.add(bodyDef, fixtures);
-    Game.scene.add(this.object);
+    scene.add(this.object);
   }
 
   Body.prototype = {
@@ -142,7 +141,7 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/physics', 'app/scale
 
     remove: function() {
       physics.remove(this.body);
-      Game.scene.remove(this.object);
+      scene.remove(this.object);
     }
 
   };

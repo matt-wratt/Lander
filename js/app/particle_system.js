@@ -1,4 +1,4 @@
-define(['underscore', 'three', 'app/game', 'app/entities', 'app/entity'], function(_, THREE, Game, entities, Entity) {
+define(['underscore', 'three', 'app/scene', 'app/entities', 'app/entity'], function(_, THREE, scene, entities, Entity) {
 
   var vShader = [
       'attribute float size;',
@@ -28,7 +28,6 @@ define(['underscore', 'three', 'app/game', 'app/entities', 'app/entity'], functi
 
   _.extend(ParticleSystem.prototype, new Entity(), {
     init: function() {
-      if(!Game) Game = require('app/game');
       this.motion = [];
       this.decay = [];
       var attributes = {
@@ -64,13 +63,13 @@ define(['underscore', 'three', 'app/game', 'app/entities', 'app/entity'], functi
       particleSystem = new THREE.ParticleSystem( this.geometry, shaderMaterial );
       particleSystem.dynamic = true;
       this.system = particleSystem;
-      Game.scene.add(this.system);
+      scene.add(this.system);
       entities.add(this);
     },
 
     removing: function() {
       Entity.prototype.removing.call(this);
-      Game.scene.remove(this.system);
+      scene.remove(this.system);
     },
 
     update: function() {

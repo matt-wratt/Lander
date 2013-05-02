@@ -7,12 +7,13 @@ define([
   'dat_gui',
   'app/scale',
   'app/entities',
+  'app/scene',
   'app/input_manager',
   'app/particle_system',
   'app/physics',
   'app/body',
   'app/lander'
-], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, entities, input, particles, physics, Body, Lander) {
+], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, entities, scene, input, particles, physics, Body, Lander) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
@@ -32,37 +33,11 @@ define([
 
       var width = innerWidth;
       var height = innerHeight;
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
-      this.camera.position.copy(scale.to3D({x: 20, y: 20}, -50));
 
-      // this.cameraControls = new OrbitControls(this.camera);
-
-      this.renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x000000, clearAlpha: 1});
-      this.renderer.shadowMapEnabled = true;
-      this.renderer.shadowMapSoft = false;
-
-      this.renderer.shadowCameraNear = 3;
-      this.renderer.shadowCameraFar = this.camera.far;
-      this.renderer.shadowCameraFov = 10;
-
-      this.renderer.shadowMapBias = 0.0039;
-      this.renderer.shadowMapDarkness = 0.5;
-      this.renderer.shadowMapWidth = 1024;
-      this.renderer.shadowMapHeight = 1024;
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-      document.body.appendChild(this.renderer.domElement);
-
-      window.addEventListener('resize', function resize() {
-        self.camera.aspect = window.innerWidth / window.innerHeight;
-        self.camera.updateProjectionMatrix();
-        self.renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-
-      this.scene = new THREE.Scene();
+      scene.init();
 
       var ambientLight = new THREE.AmbientLight( 0xffffff );
-      this.scene.add(ambientLight);
+      scene.add(ambientLight);
 
       var light = new THREE.DirectionalLight( 0xffffff, 0.7 );
       light.castShadow = true;
@@ -72,7 +47,7 @@ define([
       light.shadowCameraRight = 50 * scale.scale;
       light.shadowCameraTop = 80 * scale.scale;
       light.shadowCameraBottom = -80 * scale.scale;
-      this.scene.add(light);
+      scene.add(light);
 
       this.controls = {
         reset: this.reset,
@@ -212,14 +187,14 @@ define([
         this.lander.engineLeft.joint.main.motorTorque(this.controls['motor torque']);
       }
       if(this.controls['camera fixed']) {
-        this.camera.position.copy(scale.to3D({x: 20, y: 20}, -50));
+        scene.camera.position.copy(scale.to3D({x: 20, y: 20}, -50));
       } else {
-        this.camera.position.copy(scale.to3D(this.lander.body.main.position(), -50));
+        scene.camera.position.copy(scale.to3D(this.lander.body.main.position(), -50));
       }
       if(this.cameraControls) {
         this.cameraControls.update();
       }
-      this.renderer.render(this.scene, this.camera);
+      scene.render();
       this.lastFrame = time;
     }
   };
