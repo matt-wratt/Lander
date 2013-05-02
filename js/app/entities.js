@@ -61,6 +61,6 @@ define(['underscore'], function(_) {
 
   };
 
-  return Entities;
+  return new Entities();
 
 });

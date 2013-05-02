@@ -12,7 +12,7 @@ define([
   'app/physics',
   'app/body',
   'app/lander'
-], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, Entities, input, particles, physics, Body, Lander) {
+], function(ready, _, THREE, Box2D, OrbitControls, dat, scale, entities, input, particles, physics, Body, Lander) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
@@ -29,8 +29,6 @@ define([
       input.bind(40, 'down');
       input.bind(37, 'left');
       input.bind(16, 'turbo');
-
-      this.entities = new Entities();
 
       var width = innerWidth;
       var height = innerHeight;
@@ -191,12 +189,12 @@ define([
       }
 
       this.lander = new Lander(this.controls.mode, width / 4, height - 5);
-      this.entities.add(this.lander);
+      entities.add(this.lander);
       particles.init();
     },
 
     reset: function() {
-      this.entities.removeAll();
+      entities.removeAll();
       this.physics.removeAll();
       this.createWorld();
     },
@@ -205,7 +203,7 @@ define([
       if(!time) time = new Date().getTime();
       requestAnimationFrame(this.animate);
       var dt = Math.min(1/15, (time - this.lastFrame) / 1000);
-      this.entities.step(dt);
+      entities.step(dt);
       this.physics.step(dt);
       this.lander.engine.engineThrust = this.controls.thrust;
       this.lander.engine.joint.main.motorTorque(this.controls['motor torque']);

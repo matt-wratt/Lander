@@ -1,11 +1,9 @@
-define(['underscore', 'three', 'box2dweb', 'app/game', 'app/input_manager', 'app/entity', 'app/engine'], function(_, THREE, Box2D, Game, input, Entity, Engine) {
+define(['underscore', 'three', 'box2dweb', 'app/entities', 'app/input_manager', 'app/entity', 'app/engine'], function(_, THREE, Box2D, entities, input, Entity, Engine) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
   function Lander(mode, x, y) {
     Entity.call(this);
-
-    if(!Game) Game = require('app/game');
 
     this.mode = mode;
 
@@ -148,10 +146,10 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/input_manager', 'app
   _.extend(Lander.prototype, new Entity(), {
 
     adding: function() {
-      Game.entities.add(this.engine);
+      entities.add(this.engine);
       if(this.mode === 'Multi Rocket') {
-        Game.entities.add(this.engineRight);
-        Game.entities.add(this.engineLeft);
+        entities.add(this.engineRight);
+        entities.add(this.engineLeft);
       }
     },
 

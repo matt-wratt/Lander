@@ -1,4 +1,4 @@
-define(['underscore', 'three', 'app/game', 'app/entity'], function(_, THREE, Game, Entity) {
+define(['underscore', 'three', 'app/game', 'app/entities', 'app/entity'], function(_, THREE, Game, entities, Entity) {
 
   var vShader = [
       'attribute float size;',
@@ -65,7 +65,7 @@ define(['underscore', 'three', 'app/game', 'app/entity'], function(_, THREE, Gam
       particleSystem.dynamic = true;
       this.system = particleSystem;
       Game.scene.add(this.system);
-      Game.entities.add(this);
+      entities.add(this);
     },
 
     removing: function() {
