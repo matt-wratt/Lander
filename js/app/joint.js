@@ -1,11 +1,10 @@
-define(['box2dweb', 'app/game'], function(Box2D, Game) {
+define(['box2dweb', 'app/physics'], function(Box2D, physics) {
 
   var defaultOptions = {
     type: 'revolute'
   };
 
   function Joint(options) {
-    if(!Game) Game = require('app/game');
     options = _.extend({}, defaultOptions, options);
     var def;
     switch(options.type) {
@@ -28,7 +27,7 @@ define(['box2dweb', 'app/game'], function(Box2D, Game) {
       options.bodies[1].body,
       options.anchor
     );
-    this.joint = Game.physics.addJoint(def);
+    this.joint = physics.addJoint(def);
   }
 
   Joint.prototype = {
@@ -52,7 +51,7 @@ define(['box2dweb', 'app/game'], function(Box2D, Game) {
     },
 
     remove: function() {
-      Game.physics.remove(this.joint);
+      physics.remove(this.joint);
     }
 
   };

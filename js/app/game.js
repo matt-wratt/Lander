@@ -74,8 +74,6 @@ define([
       light.shadowCameraBottom = -80 * scale.scale;
       this.scene.add(light);
 
-      this.physics = physics;
-
       this.controls = {
         reset: this.reset,
         'camera fixed': false,
@@ -96,15 +94,15 @@ define([
       gui.add(this.controls, 'motor torque', 0, 200);
 
       addEventListener('mousedown', function(e) {
-        self.physics.startDrag(new b2Vec2(e.x, e.y));
+        physics.startDrag(new b2Vec2(e.x, e.y));
       });
 
       addEventListener('mouseup', function(e) {
-        self.physics.stopDrag();
+        physics.stopDrag();
       });
 
       addEventListener('mousemove', function(e) {
-        self.physics.drag(new b2Vec2(e.x, e.y));
+        physics.drag(new b2Vec2(e.x, e.y));
       });
 
       this.lastFrame = 0;
@@ -112,8 +110,8 @@ define([
     },
 
     createWorld: function() {
-      var width = innerWidth / this.physics.scale;
-      var height = innerHeight / this.physics.scale;
+      var width = innerWidth / physics.scale;
+      var height = innerHeight / physics.scale;
       var position = new b2Vec2(width / 2, height);
       var material = new THREE.MeshPhongMaterial({color: 0x009900, ambient: 0x003300});
       var landing = new THREE.MeshPhongMaterial({color: 0x999999, ambient: 0x333333});
@@ -195,7 +193,7 @@ define([
 
     reset: function() {
       entities.removeAll();
-      this.physics.removeAll();
+      physics.removeAll();
       this.createWorld();
     },
 
@@ -204,7 +202,7 @@ define([
       requestAnimationFrame(this.animate);
       var dt = Math.min(1/15, (time - this.lastFrame) / 1000);
       entities.step(dt);
-      this.physics.step(dt);
+      physics.step(dt);
       this.lander.engine.engineThrust = this.controls.thrust;
       this.lander.engine.joint.main.motorTorque(this.controls['motor torque']);
       if(this.lander.mode === 'Multi Rocket') {
