@@ -32,8 +32,6 @@ define([
 
       this.entities = new Entities();
 
-      this.particles = particles;
-
       var width = innerWidth;
       var height = innerHeight;
       this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
@@ -194,7 +192,7 @@ define([
 
       this.lander = new Lander(this.controls.mode, width / 4, height - 5);
       this.entities.add(this.lander);
-      this.particles.init();
+      particles.init();
     },
 
     reset: function() {

@@ -1,4 +1,4 @@
-define(['underscore', 'three', 'box2dweb', 'app/game', 'app/entity', 'app/body_reference', 'app/scale'], function(_, THREE, Box2D, Game, Entity, BodyReference, scale) {
+define(['underscore', 'three', 'box2dweb', 'app/game', 'app/particle_system', 'app/entity', 'app/body_reference', 'app/scale'], function(_, THREE, Box2D, Game, particles, Entity, BodyReference, scale) {
 
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
@@ -105,7 +105,7 @@ define(['underscore', 'three', 'box2dweb', 'app/game', 'app/entity', 'app/body_r
       thrustVector.add(v);
       thrustPoint = this.body.main.worldPoint(new b2Vec2(0, 1));
       thrustPoint = scale.to3D(thrustPoint);
-      Game.particles.cone(thrustPoint, thrustVector, new THREE.Color(0xdd380c), this.engineThrust / 10);
+      particles.cone(thrustPoint, thrustVector, new THREE.Color(0xdd380c), this.engineThrust / 10);
       this.light.intensity = 5;
       this.light.position.copy(thrustPoint);
   }
