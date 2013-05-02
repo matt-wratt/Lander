@@ -41,6 +41,10 @@ define(['three', 'app/scale'], function(THREE, scale) {
 
     add: function(object) {
       return this.scene.add(object);
+    },
+
+    remove: function(object) {
+      return this.scene.remove(object);
     }
 
   };
